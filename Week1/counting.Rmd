@@ -1,0 +1,122 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Let's assume that:
+
+    you will use the base R
+    you have a data.frame named df.
+    the data.frame df has n variables/columns: V1, V2,..., Vn
+    you want to know how many missing values exist in the V1 variable/column
+
+To get the number of missing values (NAs) you have to execute the following:
+
+    sum(is.na(df$V1))
+
+If you want to get the number of missing values at each variable with one command try:
+
+    lapply(X = df, FUN = function(x) sum(is.na(x))) # this will return a list
+
+or
+
+    vapply(X = df, FUN = function(x) sum(is.na(x)), FUN.VALUE = numeric(1)) # this will return a numeric vector
+
+-----------------------------------------------------------------------------------------------------------
+
+BONUS - 1 !!!
+
+Sometimes it is more useful to examine the percentage of missing values. To do this instead of:
+
+    sum(is.na(df$V1))
+    lapply(X = df, FUN = function(x) sum(is.na(x)))
+    vapply(X = df, FUN = function(x) sum(is.na(x)), FUN.VALUE = numeric(1)) 
+
+you call:
+
+    mean(is.na(df$V1))
+    lapply(X = df, FUN = function(x) mean(is.na(x))) # this will return a list
+    vapply(X = df, FUN = function(x) mean(is.na(x)), FUN.VALUE = numeric(1)) 
+
+-----------------------------------------------------------------------------------------------------------
+
+BONUS - 2 !!!
+
+Another useful thing to do relevant to missing values, is to count the number of complete observations. Complete observations are the ROWS of a data frame that do not contain any missing values.
+
+For the number of complete observations you call:
+
+    sum(complete.cases(df))
+
+For the percentage of complete observations you call:
+
+    mean(complete.cases(df))
+
+to get the opposite, which is the number of NOT complete observations you can negate the output of complete.cases with !:
+
+    sum(!complete.cases(df))
+    mean(!complete.cases(df))
+
+-----------------------------------------------------------------------------------------------------------
+
+Finally I would like to advice you to learn how to search things online, as it will help you in the long run. You can try putting [r] in the end of your search which will produce answers relevant to R. For example you could try:
+
+    count number of missing values [r] 
+
+Keep it up! The start is challenging for everybody! 
+
+
+
+But why the above approach works?
+
+the function is.na() (and the function complete.cases()) will return a logical vector with values either TRUE or FALSE.
+
+Let's assume that:
+
+    data.frame df has 5 rows
+    the 1st and the 2nd rows for the V1 variable are NA.
+
+When you run
+
+    is.na(df$V1) 
+
+you will get a logical vector
+
+    c(TRUE, TRUE, FALSE, FALSE, FALSE)
+
+so the result of
+
+    sum(is.na(V1))
+
+is equivalent to
+
+    sum(c(TRUE, TRUE, FALSE, FALSE, FALSE))
+
+but R treats:
+
+    FALSE as being equal to 0
+    TRUE as being equal to 1
+
+This makes the
+
+    sum(c(TRUE, TRUE, FALSE, FALSE, FALSE))
+
+equivalent to
+
+    sum(c(1, 1, 0, 0, 0)) 
+
+and that is the process which let you know that there are 2 missing values.
+
+Similarly:
+
+    mean(is.na(df$))
+
+is equivalent to:
+
+    mean(c(TRUE, TRUE, FALSE, FALSE, FALSE))
+
+which is equivalent to:
+
+    mean(c(1, 1, 0, 0, 0)) 
+
+so the answer will be 0.4.
