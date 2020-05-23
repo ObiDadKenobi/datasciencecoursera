@@ -17,7 +17,7 @@ complete <-function(directory="specdata", id=1:332) {
       # Loop through all monitor files and binds a subset of them together
       # or default of all 332 files
       alldata <- rbind(alldata, read.csv(idfilelist[i]))
-      nobs_subset<-rbind(nobs_subset,nobs_alldata<-sum(alldata$ID[i]))
+#      nobs_subset<-rbind(nobs_subset,nobs_alldata<-sum(alldata$ID[i]))
     }
 
   alldata<-alldata[complete.cases(alldata), ]

@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+meansOfSomeRows <- function(input.df, id, cols.for.mean){
+   v <- numeric(length(id))
+   for (j in 1:length(id)) {
+      row.index <- id[j]  #  get the desired row of the data frame from id
+      row.of.df <- input.df[row.index, cols.for.mean]  # row, with requested columns
+# row.of.df is a 1 row data frame, not a vector
+# the mean function expects a vector as input
+# a data frame is a special type of list, so here we
+# we can use unlist to get a vector from row.of.df:
+      row.vec <- unlist(row.of.df)
+      row.mean <- mean(row.vec, na.rm = TRUE) # calculate the mean, discarding NA’s
+      v[j] <- row.mean # now j is the correct index to use in v
+   } # end of the for loop
+# use id and v to create a 2 column data frame of the results
+   result <- data.frame(id, means = v)
+# for this function, return the data frame of the results
+   return(result)
+} # end of the function
+
+meansOfSomeRows(input.df = df, id, cols.for.mean)
+  id means
+1  2   5.5
+2  3   2.5
+3  6   5.5
