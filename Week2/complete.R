@@ -5,35 +5,26 @@
 ## first column is the name of the file and the second column is the number of complete cases
 
 complete <-function(directory="specdata", id=1:332) {
-  id<-c(2, 4, 8, 10, 12)
-  directory="specdata"
-  directory <-file.path(getwd(),directory) # Get fully qualified path to files appending value from directory
+
+  monitorids<-c()         ## create empty vector to store ids from loop
+  nobs<-c()               ## create empty vector to store row counts per file
+  directory <-file.path(getwd(),directory)   # Get fully qualified path to files appending value from directory
   idfilelist <-list.files(path=directory,full.names = TRUE) # Create list of all monitor files
-  alldata <-data.frame() # create empty data frame to store subsetted data
-  nobs<-data.frame()
-  result<-data.frame()
-  
+  alldata <-data.frame()  ## create empty data frame to store subsetted data
     for (i in id) {
-      # Loop through all monitor files and binds a subset of them together
+      
+      # Loop through each monitor data from ID input
       # or default of all 332 files
-      alldata <- rbind(alldata, read.csv(idfilelist[i]))
-#      nobs_subset<-rbind(nobs_subset,nobs_alldata<-sum(alldata$ID[i]))
+      
+      alldata <- read.csv(idfilelist[i],header = TRUE) ## Read each filename from list
+      alldata<-alldata[complete.cases(alldata), ]## Remove NAs from data before counting rows
+      monitorids <-  c(monitorids, i)            ## Create a vector of IDs for the final result
+      nobs <- c(nobs, nrow(alldata) )            ## Counts the rows for each subset into a vector
+      
     }
-
-  alldata<-alldata[complete.cases(alldata), ]
-
+  ## Combine result into a data frame
+  data.frame(id=monitorids, nobs=nobs)
   
-
-
-  
-##  dat_subset <- dat[which(dat[, "Day"] %in% day),]  #subsets the rows that match the 'day' argument
-##  median(dat_subset[, "Weight"], na.rm=TRUE)      #identifies the median weight 
-  #while stripping out the NAs
-
-
-
-nobs
-
 }
 
 
